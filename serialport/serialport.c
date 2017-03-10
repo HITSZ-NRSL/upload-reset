@@ -47,6 +47,7 @@ static DCB sDCB;
 static COMMTIMEOUTS sTIMEOUTS;
 #else
 static int serial_port = -1;
+static struct termios oldterm;
 static struct termios term;
 static unsigned int timeout;
 #endif
@@ -341,8 +342,8 @@ int serialport_open(const char *device, unsigned int baudrate)
 #endif
 
     LOGDEBUG("tcgetattr");
-    tcgetattr(serial_port,&term);
-
+    tcgetattr(serial_port,&oldterm);
+     term = oldterm;
     serialport_set_baudrate(baudrate);
 
     term.c_cflag |= CRTSCTS | CLOCAL;
@@ -413,6 +414,7 @@ int serialport_close(void)
     {
         tcdrain(serial_port);
         tcflush(serial_port, TCIOFLUSH);
+        tcsetattr(serial_port, TCSANOW, &oldterm);
         close(serial_port);
         return 1;
     }
