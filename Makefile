@@ -36,12 +36,15 @@ endif
 
 VERSION ?= $(shell git describe --always)
 
-MODULES		:= upload-reset
+MODULES		:=  argparse infohelper serialport
 
 -include local/Makefile.local.$(TARGET_OS)
 
 OBJECTS		:= \
-	src/upload-reset.o \
+	main.o \
+	argparse/argparse.o \
+	infohelper/infohelper.o \
+	serialport/serialport.o \
 
 INCLUDES	:= $(addprefix -I,$(MODULES))
 
