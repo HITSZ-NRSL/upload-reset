@@ -1,0 +1,5 @@
+TARGET		= upload-reset
+
+INSTALLDIR_BIN	= /usr/local/bin
+TARGET_FLAGS	=
+TARGET_CFLAGS	=
