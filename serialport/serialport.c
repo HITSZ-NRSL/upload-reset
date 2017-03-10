@@ -120,7 +120,7 @@ int serialport_open(const char *device, unsigned int baudrate)
     sprintf(portName,"\\\\.\\%s", device);
     sPort = CreateFile(portName, GENERIC_WRITE|GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-    if (sPort == INVALID_HANDLE_VALUE) 
+    if (sPort == INVALID_HANDLE_VALUE)
     {
         LOGERR("Failed to open %s", device);
         return 0;
@@ -171,7 +171,7 @@ unsigned serialport_write(const unsigned char* data, unsigned int size)
     {
         LOGDEBUG("wrote %d, requested %d", cb, size);
     }
-    return (unsigned) cb; 
+    return (unsigned) cb;
 }
 
 void serialport_flush(void)
@@ -179,7 +179,7 @@ void serialport_flush(void)
     unsigned char tmp[512];
     if(sPort)
     {
-        LOGDEBUG("flush start"); 
+        LOGDEBUG("flush start");
         unsigned old_timeout = sTIMEOUTS.ReadTotalTimeoutConstant;
         serialport_set_timeout(1);
         ClearCommError(sPort, NULL, NULL);
@@ -329,7 +329,7 @@ int serialport_open(const char *device, unsigned int baudrate)
 #endif
     serial_port = open(device, flags);
 
-    if(serial_port<0) 
+    if(serial_port<0)
     {
         LOGERR("cannot access %s\n",device);
         return 0;
@@ -340,33 +340,13 @@ int serialport_open(const char *device, unsigned int baudrate)
     fcntl(serial_port, F_SETFL, flags & (~O_NONBLOCK));
 #endif
 
-    serialport_set_dtr(0);
-
     LOGDEBUG("tcgetattr");
     tcgetattr(serial_port,&term);
 
     serialport_set_baudrate(baudrate);
 
-    term.c_cflag = (term.c_cflag & ~CSIZE) | CS8;
-    term.c_cflag |= CLOCAL | CREAD;
-
-    term.c_cflag &= ~(PARENB | PARODD);
-    term.c_cflag &= ~CSTOPB;
-
-    term.c_iflag = IGNBRK;
-
-    term.c_iflag &= ~(IXON | IXOFF);
-
-    term.c_lflag = 0;
-
+    term.c_cflag |= CRTSCTS | CLOCAL;
     term.c_oflag = 0;
-
-
-    term.c_cc[VMIN]=0;
-    term.c_cc[VTIME]=1;
-    timeout = 100;
-
-
 
     LOGDEBUG("tcsetattr");
     if (tcsetattr(serial_port, TCSANOW, &term)!=0)
@@ -375,20 +355,14 @@ int serialport_open(const char *device, unsigned int baudrate)
         return 0;
     }
 
-
-    if (tcgetattr(serial_port, &term)!=0)
-    {
-        LOGERR("getattr failed");
-        return 0;
-    }
-
-    term.c_cflag &= ~CRTSCTS;
-
     if (tcsetattr(serial_port, TCSANOW, &term)!=0)
     {
         LOGERR("setattr stage 2 failed");
         return 0;
     }
+    serialport_set_dtr(0);
+    serialport_set_rts(0);
+
     LOGDEBUG("serial open");
     return serial_port;
 }
