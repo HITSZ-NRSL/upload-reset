@@ -15,7 +15,7 @@ build_script:
       #- for /f %%i in ('git describe --always') do set PRODUCT_VERSION=%%i
     - SET PRODUCT_VERSION=1.0.0
     - SET PRODUCT_NAME=upload-reset-%PRODUCT_VERSION%
-    - SET PLATFORM_NAME=win32
+    - SET PLATFORM_NAME=windows
     - SET PRODUCT_DIST_NAME=%PRODUCT_NAME%-%PLATFORM_NAME%
     - echo %PRODUCT_NAME%
     - echo %PRODUCT_DIST_NAME%

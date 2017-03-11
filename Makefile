@@ -81,4 +81,5 @@ $(DIST_DIR):
 clean:
 	@rm -f $(OBJECTS)
 	@rm -f $(TARGET)
+	@rm -rf $(DIST_DIR)
 	@rm -rf upload-reset-*
