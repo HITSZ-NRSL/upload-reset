@@ -113,7 +113,7 @@ int parse_arg(int num_args, char **arg_ptr)
             case '?':
             case 'h':
                 print_help();
-                return 1;
+                return 0xFF;
                 break;
 
             default:

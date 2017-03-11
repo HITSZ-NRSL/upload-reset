@@ -64,7 +64,10 @@ int main(int argc, char **argv)
             LOGERR("Invalid argument or value after %s (argument #%d)", arg_ptr[0], arg_ptr - argv + 1);
             goto EXITERROR;
         }
-
+        else if(num_args_parsed == 0xFF) //help
+        {
+            return 0;
+        }
         num_args -= num_args_parsed;
         arg_ptr += num_args_parsed;
     }
