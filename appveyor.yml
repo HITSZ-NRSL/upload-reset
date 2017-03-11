@@ -12,16 +12,17 @@ matrix:
 build_script:
     - SET PATH=C:\MinGW\bin;C:\MinGW\msys\1.0\bin;%PATH%
     - make all CC=gcc
-    - for /f %%i in ('git describe --always') do set PRODUCT_VERSION=%%i
+      #- for /f %%i in ('git describe --always') do set PRODUCT_VERSION=%%i
+    - SET PRODUCT_VERSION=1.0.0
     - SET PRODUCT_NAME=upload-reset-%PRODUCT_VERSION%
     - SET PLATFORM_NAME=win32
     - SET PRODUCT_DIST_NAME=%PRODUCT_NAME%-%PLATFORM_NAME%
     - echo %PRODUCT_NAME%
     - echo %PRODUCT_DIST_NAME%
-    - mkdir %PRODUCT_DIST_NAME%
-    - cp upload-reset.exe %PRODUCT_DIST_NAME%\upload-reset.exe
+    - mkdir %PRODUCT_VERSION%
+    - cp upload-reset.exe %PRODUCT_VERSION%\upload-reset.exe
     - SET PRODUCT_ZIP=%PRODUCT_DIST_NAME%.zip
-    - 7z a %PRODUCT_ZIP% %PRODUCT_DIST_NAME%
+    - 7z a %PRODUCT_ZIP% %PRODUCT_VERSION%
     - appveyor PushArtifact %PRODUCT_ZIP%
     - SET PRODUCT_ZIP_SHA=%PRODUCT_ZIP%.sha
     - ps: Get-FileHash $env:PRODUCT_ZIP -Algorithm SHA1 | Out-File $env:PRODUCT_ZIP_SHA
