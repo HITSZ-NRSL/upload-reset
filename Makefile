@@ -45,6 +45,7 @@ OBJECTS		:= \
 	argparse/argparse.o \
 	infohelper/infohelper.o \
 	serialport/serialport.o \
+	serialport/delay.o \
 
 INCLUDES	:= $(addprefix -I,$(MODULES))
 

@@ -26,11 +26,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 
 #include "infohelper.h"
 #include "argparse.h"
 #include "serialport.h"
+#include "delay.h"
 
 extern char *serial_port;
 extern uint32_t serial_baudrate;
@@ -75,10 +75,10 @@ int main(int argc, char **argv)
         if(serialport_open(serial_port, serial_baudrate))
         {
             serialport_close();
-            usleep(delaytime*1000L);
+            delay_ms(delaytime);
             return 0;
         }
-        usleep(500000L);
+        delay_ms(500);
         serialport_close();
     }while(n--);
     LOGDEBUG("port open failed");
